@@ -134,6 +134,12 @@ namespace
         OUTGOING_PORT_MAX,
         UPNP_LEASE_DURATION,
         PEER_TOS,
+#ifdef QBT_USES_LIBTORRENT2
+        I2P_INBOUND_QUANTITY,
+        I2P_OUTBOUND_QUANTITY,
+        I2P_INBOUND_LENGTH,
+        I2P_OUTBOUND_LENGTH,
+#endif
         UTP_MIX_MODE,
         IDN_SUPPORT,
         MULTI_CONNECTIONS_PER_IP,
@@ -245,6 +251,13 @@ void AdvancedSettings::saveAdvancedSettings() const
     session->setUPnPLeaseDuration(m_spinBoxUPnPLeaseDuration.value());
     // Type of service
     session->setPeerToS(m_spinBoxPeerToS.value());
+#ifdef QBT_USES_LIBTORRENT2
+    // I2P session options
+    session->setI2PInboundQuantity(m_spinBoxI2PInboundQuantity.value());
+    session->setI2POutboundQuantity(m_spinBoxI2POutboundQuantity.value());
+    session->setI2PInboundLength(m_spinBoxI2PInboundLength.value());
+    session->setI2POutboundLength(m_spinBoxI2POutboundLength.value());
+#endif
     // uTP-TCP mixed mode
     session->setUtpMixedMode(m_comboBoxUtpMixedMode.currentData().value<BitTorrent::MixedModeAlgorithm>());
     // Support internationalized domain name (IDN)
@@ -636,6 +649,28 @@ void AdvancedSettings::loadAdvancedSettings()
     m_spinBoxPeerToS.setValue(session->peerToS());
     addRow(PEER_TOS, (tr("Type of service (ToS) for connections to peers") + u' ' + makeLink(u"https://www.libtorrent.org/reference-Settings.html#peer_tos", u"(?)"))
         , &m_spinBoxPeerToS);
+#ifdef QBT_USES_LIBTORRENT2
+    m_spinBoxI2PInboundQuantity.setMinimum(1);
+    m_spinBoxI2PInboundQuantity.setMaximum(16);
+    m_spinBoxI2PInboundQuantity.setValue(session->I2PInboundQuantity());
+    addRow(I2P_INBOUND_QUANTITY, (tr("I2P inbound quantity") + u' ' + makeLink(u"https://www.libtorrent.org/reference-Settings.html#i2p_inbound_quantity", u"(?)"))
+        , &m_spinBoxI2PInboundQuantity);
+    m_spinBoxI2POutboundQuantity.setMinimum(1);
+    m_spinBoxI2POutboundQuantity.setMaximum(16);
+    m_spinBoxI2POutboundQuantity.setValue(session->I2POutboundQuantity());
+    addRow(I2P_OUTBOUND_QUANTITY, (tr("I2P outbound quantity") + u' ' + makeLink(u"https://www.libtorrent.org/reference-Settings.html#i2p_outbound_quantity", u"(?)"))
+        , &m_spinBoxI2POutboundQuantity);
+    m_spinBoxI2PInboundLength.setMinimum(0);
+    m_spinBoxI2PInboundLength.setMaximum(7);
+    m_spinBoxI2PInboundLength.setValue(session->I2PInboundLength());
+    addRow(I2P_INBOUND_LENGTH, (tr("I2P inbound length") + u' ' + makeLink(u"https://www.libtorrent.org/reference-Settings.html#i2p_inbound_length", u"(?)"))
+        , &m_spinBoxI2PInboundLength);
+    m_spinBoxI2POutboundLength.setMinimum(0);
+    m_spinBoxI2POutboundLength.setMaximum(7);
+    m_spinBoxI2POutboundLength.setValue(session->I2POutboundLength());
+    addRow(I2P_OUTBOUND_LENGTH, (tr("I2P outbound length") + u' ' + makeLink(u"https://www.libtorrent.org/reference-Settings.html#i2p_outbound_length", u"(?)"))
+        , &m_spinBoxI2POutboundLength);
+#endif
     // uTP-TCP mixed mode
     m_comboBoxUtpMixedMode.addItem(tr("Prefer TCP"), QVariant::fromValue(BitTorrent::MixedModeAlgorithm::TCP));
     m_comboBoxUtpMixedMode.addItem(tr("Peer proportional (throttles TCP)"), QVariant::fromValue(BitTorrent::MixedModeAlgorithm::Proportional));

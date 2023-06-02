@@ -357,6 +357,14 @@ namespace BitTorrent
         virtual void setUPnPLeaseDuration(int duration) = 0;
         virtual int peerToS() const = 0;
         virtual void setPeerToS(int value) = 0;
+        virtual int I2PInboundQuantity() const = 0;
+        virtual void setI2PInboundQuantity(int value) = 0;
+        virtual int I2POutboundQuantity() const = 0;
+        virtual void setI2POutboundQuantity(int value) = 0;
+        virtual int I2PInboundLength() const = 0;
+        virtual void setI2PInboundLength(int value) = 0;
+        virtual int I2POutboundLength() const = 0;
+        virtual void setI2POutboundLength(int value) = 0;
         virtual bool ignoreLimitsOnLAN() const = 0;
         virtual void setIgnoreLimitsOnLAN(bool ignore) = 0;
         virtual bool includeOverheadInLimits() const = 0;

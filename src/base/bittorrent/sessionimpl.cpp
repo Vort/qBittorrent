@@ -452,6 +452,10 @@ SessionImpl::SessionImpl(QObject *parent)
     , m_outgoingPortsMax(BITTORRENT_SESSION_KEY(u"OutgoingPortsMax"_qs), 0)
     , m_UPnPLeaseDuration(BITTORRENT_SESSION_KEY(u"UPnPLeaseDuration"_qs), 0)
     , m_peerToS(BITTORRENT_SESSION_KEY(u"PeerToS"_qs), 0x04)
+    , m_I2PInboundQuantity(BITTORRENT_SESSION_KEY(u"I2P/InboundQuantity"_qs), 3)
+    , m_I2POutboundQuantity(BITTORRENT_SESSION_KEY(u"I2P/OutboundQuantity"_qs), 3)
+    , m_I2PInboundLength(BITTORRENT_SESSION_KEY(u"I2P/InboundLength"_qs), 3)
+    , m_I2POutboundLength(BITTORRENT_SESSION_KEY(u"I2P/OutboundLength"_qs), 3)
     , m_ignoreLimitsOnLAN(BITTORRENT_SESSION_KEY(u"IgnoreLimitsOnLAN"_qs), false)
     , m_includeOverheadInLimits(BITTORRENT_SESSION_KEY(u"IncludeOverheadInLimits"_qs), false)
     , m_announceIP(BITTORRENT_SESSION_KEY(u"AnnounceIP"_qs))
@@ -1820,6 +1824,13 @@ lt::settings_pack SessionImpl::loadLTSettings() const
     settingsPack.set_int(lt::settings_pack::upnp_lease_duration, UPnPLeaseDuration());
     // Type of service
     settingsPack.set_int(lt::settings_pack::peer_tos, peerToS());
+#ifdef QBT_USES_LIBTORRENT2
+    // I2P session options
+    settingsPack.set_int(lt::settings_pack::i2p_inbound_quantity, I2PInboundQuantity());
+    settingsPack.set_int(lt::settings_pack::i2p_outbound_quantity, I2POutboundQuantity());
+    settingsPack.set_int(lt::settings_pack::i2p_inbound_length, I2PInboundLength());
+    settingsPack.set_int(lt::settings_pack::i2p_outbound_length, I2POutboundLength());
+#endif
     // Include overhead in transfer limits
     settingsPack.set_bool(lt::settings_pack::rate_limit_ip_overhead, includeOverheadInLimits());
     // IP address to announce to trackers
@@ -4452,6 +4463,62 @@ void SessionImpl::setPeerToS(const int value)
         return;
 
     m_peerToS = value;
+    configureDeferred();
+}
+
+int SessionImpl::I2PInboundQuantity() const
+{
+    return m_I2PInboundQuantity;
+}
+
+void SessionImpl::setI2PInboundQuantity(const int value)
+{
+    if (value == m_I2PInboundQuantity)
+        return;
+
+    m_I2PInboundQuantity = value;
+    configureDeferred();
+}
+
+int SessionImpl::I2POutboundQuantity() const
+{
+    return m_I2POutboundQuantity;
+}
+
+void SessionImpl::setI2POutboundQuantity(const int value)
+{
+    if (value == m_I2POutboundQuantity)
+        return;
+
+    m_I2POutboundQuantity = value;
+    configureDeferred();
+}
+
+int SessionImpl::I2PInboundLength() const
+{
+    return m_I2PInboundLength;
+}
+
+void SessionImpl::setI2PInboundLength(const int value)
+{
+    if (value == m_I2PInboundLength)
+        return;
+
+    m_I2PInboundLength = value;
+    configureDeferred();
+}
+
+int SessionImpl::I2POutboundLength() const
+{
+    return m_I2POutboundLength;
+}
+
+void SessionImpl::setI2POutboundLength(const int value)
+{
+    if (value == m_I2POutboundLength)
+        return;
+
+    m_I2POutboundLength = value;
     configureDeferred();
 }
 

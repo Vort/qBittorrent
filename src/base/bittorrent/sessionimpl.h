@@ -336,6 +336,14 @@ namespace BitTorrent
         void setUPnPLeaseDuration(int duration) override;
         int peerToS() const override;
         void setPeerToS(int value) override;
+        int I2PInboundQuantity() const override;
+        void setI2PInboundQuantity(int value) override;
+        int I2POutboundQuantity() const override;
+        void setI2POutboundQuantity(int value) override;
+        int I2PInboundLength() const override;
+        void setI2PInboundLength(int value) override;
+        int I2POutboundLength() const override;
+        void setI2POutboundLength(int value) override;
         bool ignoreLimitsOnLAN() const override;
         void setIgnoreLimitsOnLAN(bool ignore) override;
         bool includeOverheadInLimits() const override;
@@ -627,6 +635,10 @@ namespace BitTorrent
         CachedSettingValue<int> m_outgoingPortsMax;
         CachedSettingValue<int> m_UPnPLeaseDuration;
         CachedSettingValue<int> m_peerToS;
+        CachedSettingValue<int> m_I2PInboundQuantity;
+        CachedSettingValue<int> m_I2POutboundQuantity;
+        CachedSettingValue<int> m_I2PInboundLength;
+        CachedSettingValue<int> m_I2POutboundLength;
         CachedSettingValue<bool> m_ignoreLimitsOnLAN;
         CachedSettingValue<bool> m_includeOverheadInLimits;
         CachedSettingValue<QString> m_announceIP;
